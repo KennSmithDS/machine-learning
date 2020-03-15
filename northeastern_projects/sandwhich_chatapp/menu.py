@@ -1,20 +1,57 @@
 import pandas as pd
 import os
 
-# Test preprocessing functions to handle user input
-stopWords = ["i","would","like","please","thank","you","order","give","me","want","let","have","this",
-    "on","it","the","but","a","about","above","after","again","against","all","am","an","any","are","arent",
-    "as","at","be","because","been","before","being","below","between","both","by","cant","cannot","could",
-    "couldnt","did","didnt","do","does","doesnt","doing","down","during","each","few","for","from",
-    "further","had","hadnt","has","hasnt","havent","having","he","hed","hell","hes","her","here","heres",
-    "hers","herself","him","himself","his","how","hows","id","ill","im","ive","if","in","into","is","isnt",
-    "its","its","itself","lets","more","most","mustnt","my","myself","of","off","once",
-    "only","other","ought","our","ours","ourselves","out","over","own","same","shant","she","shed","shell",
-    "shes","should","shouldnt","so","some","such","than","that","thats","their","theirs","them","themselves",
-    "then","there","theres","these","they","theyd","theyll","theyre","theyve","this","those","through","to",
-    "too","under","until","up","very","was","wasnt","we","wed","well","were","weve","were","werent","when",
-    "whens","where","wheres","which","while","who","whos","whom","why","whys","with","wont","what","whats"
-    "wouldnt","youd","youll","youre","youve","your","yours","yourself","yourselves"]
+class Menu:
+    def __init__(self, sandwhiches, ingredients):
+        self.sandwhiches = sandwhiches
+        self.ingredients = ingredients
+        self.menuLength = len(self.sandwhiches)
+        self.menuRead = False
+
+    def readMenu(self):
+
+        print("-"*100)
+        print(f"These are our {self.menuLength} specials today:")
+
+        for i in range(self.menuLength):
+            thisWhich = self.sandwhiches.iloc[i]
+            thisName = thisWhich["name"]
+            thisBread = thisWhich["bread"][0]
+            dressings = Menu.getIngredientString(thisWhich["dressing"])
+            meats = Menu.getIngredientString(thisWhich["meat"])
+            cheeses = Menu.getIngredientString(thisWhich["cheese"])
+            veggies = Menu.getIngredientString(thisWhich["veggie"])
+            
+            responseRoot = f"{i+1}) {thisName} comes with"
+            menuOut = responseRoot
+            
+            if len(meats) > 0:
+                menuOut = menuOut + " " + meats
+            if len(cheeses) > 0:
+                menuOut = menuOut + " " + cheeses + " cheese "
+            if len(veggies) > 0:
+                menuOut = menuOut + " " + veggies
+
+            menuOut = menuOut + " dressed with " + dressings + " on " + thisBread
+            menuOut = menuOut.replace('  ', ' ')
+
+            print(menuOut)
+
+        print("-"*100)
+
+    def readOptions(self, ingredientType):
+        print(f'Your {ingredientType} options are:')
+        ingredientSet = list(self.ingredients[self.ingredients['type']==ingredientType]['ingredient'].values)
+        for item in ingredientSet:
+            print(item)
+
+    @staticmethod
+    def getIngredientString(ingredientList):
+        if len(ingredientList) == 1:
+            return ingredientList[0]
+        elif len(ingredientList) == 0:
+            return ""
+        return " ".join(ingredientList[:-1]) + " and " + ingredientList[-1]
 
 whichDictList = [
     {'name': 'kendalls sour special', 'bread': ['sourdough'], 'dressing': ['mustard','thousand island','ranch','vinegar'], 'cheese': ['camembert'], 'meat': ['spam'], 'veggie': ['onion','saeurkraut','pickle']},
