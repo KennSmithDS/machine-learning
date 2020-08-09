@@ -54,7 +54,7 @@ def classify(row):
     return row_class
 
 def get_equity_data(ticker, end_date, start_date):
-    api_key = 'SknGuPiaoAlgo%40AMER.OAUTHAP'
+    api_key = 'f'{api_key_here}%40AMER.OAUTHAP'
     end_date = '1526108400000'
     start_date = '1451606400000'
     #start_date = '1451635200000'
