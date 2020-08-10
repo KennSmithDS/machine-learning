@@ -22,7 +22,7 @@ class OptionChainSpider(scrapy.Spider):
         return friday
 
     def start_requests(self):
-        first_url = f'{self.base_url}/{self.equity}/options?&straddle=false' #date={get_next_friday()}
+        first_url = f'{self.base_url}/{self.equity}/options?p={self.equity}&straddle=false' #date={get_next_friday()}
         self.logger.info('Returning first url to parse option expiration dates dropdown content')
         yield scrapy.Request(url=first_url, callback=self.parse_dropdown)
 
@@ -33,7 +33,7 @@ class OptionChainSpider(scrapy.Spider):
             for selection in option_dates.xpath('//select/option'):
                 expir_date = selection.xpath('.//text()').get()
                 expir_epoch = selection.xpath('.//@value').get()
-                date_url = f'{self.base_url}/{self.equity}/options?date={expir_epoch}&straddle=false'
+                date_url = f'{self.base_url}/{self.equity}/options?p={self.equity}&date={expir_epoch}&straddle=false'
                 next_page = response.urljoin(date_url)
                 self.logger.info(f'Initiating crawl for expiration date {expir_date}')
                 yield scrapy.Request(next_page, callback=self.parse_chain, headers=headers, meta={'expiry': expir_date})
@@ -49,19 +49,20 @@ class OptionChainSpider(scrapy.Spider):
         if call_table is not None:
             self.logger.info('Calls table was found')
             for row in call_table.xpath('.//tr'):
-                item = OptionChainCrawlItem()
+                item = dict()
                 item['contract_name'] = row.xpath('.//td[1]//text()').get()
                 item['last_trade'] = row.xpath('.//td[2]//text()').get()
+                item['strike'] = row.xpath('.//td[3]//text()').get()
+                item['last'] = row.xpath('.//td[4]//text()').get()
+                item['bid'] = row.xpath('.//td[5]//text()').get()
+                item['ask'] = row.xpath('.//td[6]//text()').get()
+                item['change'] = row.xpath('.//td[7]//text()').get()
+                item['perc_change'] = row.xpath('.//td[8]//text()').get()
+                item['volume'] = row.xpath('.//td[9]//text()').get()
+                item['open_interest'] = row.xpath('.//td[10]//text()').get()
+                item['implied_volatility'] = row.xpath('.//td[11]//text()').get()
                 item['expiration'] = response.meta['expiry']
                 item['option_type'] = 'call'
-                item['strike'] = row.xpath('.//td[3]//text()').get()
-                item['bid'] = row.xpath('.//td[4]//text()').get()
-                item['ask'] = row.xpath('.//td[5]//text()').get()
-                item['change'] = row.xpath('.//td[6]//text()').get()
-                item['perc_change'] = row.xpath('.//td[7]//text()').get()
-                item['volume'] = row.xpath('.//td[8]//text()').get()
-                item['open_interest'] = row.xpath('.//td[9]//text()').get()
-                item['implied_volatility'] = row.xpath('.//td[10]//text()').get()
                 yield item
         else:
             self.logger.info('Calls table was not found')
@@ -69,19 +70,20 @@ class OptionChainSpider(scrapy.Spider):
         if put_table is not None:
             self.logger.info('Puts table was found')
             for row in put_table.xpath('.//tr'):
-                item = OptionChainCrawlItem()
+                item = dict()
                 item['contract_name'] = row.xpath('.//td[1]//text()').get()
                 item['last_trade'] = row.xpath('.//td[2]//text()').get()
+                item['strike'] = row.xpath('.//td[3]//text()').get()
+                item['last'] = row.xpath('.//td[4]//text()').get()
+                item['bid'] = row.xpath('.//td[5]//text()').get()
+                item['ask'] = row.xpath('.//td[6]//text()').get()
+                item['change'] = row.xpath('.//td[7]//text()').get()
+                item['perc_change'] = row.xpath('.//td[8]//text()').get()
+                item['volume'] = row.xpath('.//td[9]//text()').get()
+                item['open_interest'] = row.xpath('.//td[10]//text()').get()
+                item['implied_volatility'] = row.xpath('.//td[11]//text()').get()
                 item['expiration'] = response.meta['expiry']
                 item['option_type'] = 'put'
-                item['strike'] = row.xpath('.//td[3]//text()').get()
-                item['bid'] = row.xpath('.//td[4]//text()').get()
-                item['ask'] = row.xpath('.//td[5]//text()').get()
-                item['change'] = row.xpath('.//td[6]//text()').get()
-                item['perc_change'] = row.xpath('.//td[7]//text()').get()
-                item['volume'] = row.xpath('.//td[8]//text()').get()
-                item['open_interest'] = row.xpath('.//td[9]//text()').get()
-                item['implied_volatility'] = row.xpath('.//td[10]//text()').get()
                 yield item
         else:
             self.logger.info('Puts table was not found')
