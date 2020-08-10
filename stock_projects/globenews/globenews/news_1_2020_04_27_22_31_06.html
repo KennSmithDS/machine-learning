@@ -1,0 +1,539 @@
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
+    <title>Send Press Releases with GlobeNewswire</title>
+    <link rel="shortcut icon" href="/Content/Images/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="/Content/css/fontawesome-all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/Content/css/styles.min.css?v=320243" />
+
+    <link rel="stylesheet" type="text/css" href="/Content/css/mobile_nav.css?v=320243" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/overwrite.css?v=320243" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/flexslider.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/slides.css?v=320243" />
+
+    <!--[if IE 7]>
+        <link rel="stylesheet" type="text/css" href="/Content/css/allstyles.min.css?v=320243"/>
+        <link rel="stylesheet" type="text/css" href="/Content/css/ie-styles.min.css?v=320243"/>
+    <![endif]-->
+    <!--[if IE 8]>
+        <link rel="stylesheet" type="text/css" href="/Content/css/allstyles.min.css?v=320243"/>
+    <![endif]-->
+
+        <link rel="canonical" href="https://www.globenewswire.com/Index" />
+    <script src="/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery-ui-1.8.18.min.js" type="text/javascript"></script>
+    <script src="/Scripts/datepicker-fr-CA.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <script src="/Scripts/myscripts.min.js?v=320243" type="text/javascript"></script>
+
+    <!--<script src="/Scripts/user-culture-helper.js?v=320243" type="text/javascript"> </script>-->
+
+    <script src="/Scripts/jquery.flexslider.js" type="text/javascript"></script>
+
+    <!-- Jeditable settings: see http://www.appelsiini.net/projects/jeditable for more info and options -->
+    <script src="/Scripts/jquery.jeditable.js" type="text/javascript"></script>
+
+    
+
+    
+    
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-24489796-1']);
+            _gaq.push(['_setDomainName', '.globenewswire.com']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    <script>
+
+        window.refreshAntiforgeryTokens = function() {
+
+            var allTokens = $("input[name='__RequestVerificationToken']");
+
+            if (allTokens && allTokens.length > 0) {
+
+                $.each(allTokens, function (i, contextElement) {
+
+                    try {
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '/Token/RefreshAntiForgeryToken',
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "html",
+                            cache: false,
+                            async: false,
+                            success: function (response) {
+                                var newToken = $('<div />').html(response).find('input[type="hidden"]').val();
+                                $(contextElement).val(newToken);
+                                console.log('done');
+                            },
+                            error: function (ssoToken) {
+                                console.error('Error RefreshAntiForgeryToken, unable to get new token' + ssoToken);
+                            }
+                        });
+
+                    } catch (e) {
+
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            var common = {};
+
+            common.addActive = function(selector, activeClass) {
+                $(selector).addClass(activeClass);
+            };
+            common.removeActive = function(selector, activeClass) {
+                $(selector).removeClass(activeClass);
+            };
+            common.checkAndChangeActiveState = function(current, container, selector, activeClass) {
+                if (current.parents(container).hasClass(activeClass)) {
+                    common.removeActive(selector, activeClass);
+                } else {
+                    common.addActive(selector, activeClass);
+                }
+            };
+
+            $("form").submit(function () {
+                var bSubmit = true;
+                $("form :input[type=text], textarea").each(function (i, v) {
+                    var element = $(v);
+                    var value = element.val();
+                    /*
+                    <	  	    #start with opening tag "<"
+                     (		    #   start of group #1
+                       "[^"]*"	#	allow string with double quotes enclosed - "string"
+                       |		#	..or
+                       '[^']*'	#	allow string with single quote enclosed - 'string'
+                       |		#	..or
+                       [^'">]	#	cant contains one single quotes, double quotes and ">"
+                     )		    #   end of group #1
+                     *		    # 0 or more
+                    >		    #end with closing tag ">"
+                    */
+                    var re = new RegExp("<(\"[^\"]*\"|'[^']*'|[^'\">])*>", "g");
+                    var myArray = value.match(re);
+                    if (myArray != null) {
+                        alert("Invalid characters. Remove < > and try again.");
+                        bSubmit = false;
+                    }
+                });
+                if (!bSubmit) return false;
+            });
+
+            // Responsive Menu
+
+            $('a.hamburger').click(function() {
+                var current = $(this);
+                var container = ".resp-header";
+                var selector = ".invis-backdrop, .resp-header, #header";
+                var activeClass = "active";
+                common.checkAndChangeActiveState(current, container, selector, activeClass);
+            });
+            $('.invis-backdrop').click(function() {
+                var selector = ".invis-backdrop, .resp-header, #header";
+                var activeClass = "active";
+                common.removeActive(selector, activeClass);
+            });
+            // END Responsive Menu
+
+            // Show / Hide Quick Search
+            $('.qsearch-link').click(function() {
+                var current = $(this);
+                var container = ".qsearch-container";
+                var selector = container;
+                var activeClass = "active";
+                common.checkAndChangeActiveState(current, container, selector, activeClass);
+            });
+            // END Show / Hide Quick Search
+
+        });
+        $(function () {
+            $('#quicksearch-textbox').autocomplete({
+                source: '/Search/AutoOrg',
+                select: function (event, ui) {
+                    this.value = ui.item.label;
+                    return false;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<!--The header goes here-->
+<div class="invis-backdrop"> <!-- .invis-backdrop used in jquery -->
+    <!-- Please leave this empty. This is used to create a click state -->
+</div>
+<div class="resp-header"> <!-- .resp-header used in jquery -->
+    <div class="resp-header-inner">
+        <a class="hamburger">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-times"></i>
+        </a>
+        <a href="/Index" class="gnw-headline">GlobeNewswire</a>
+    </div>
+</div>
+<div id="header"> <!-- #header used in jquery -->
+    <div class="header-nav">
+        <div id="logodiv">
+            <a href="https://www.globenewswire.com/en" title="Home" id="logolink">
+                <img src="/Content/Images/intrado.png" alt="Intrado Logo"/>
+            </a>
+        </div>
+
+
+        <!-- QUICKSEARCH:
+        See this website for more info about server-side search setup. 
+        http://jqueryui.com/demos/autocomplete/
+        Look at the examples on the left, then look at the source offered on the page.
+        -->
+        <div class="qsearch-container">
+            <a class="qsearch-link">
+                <i class="fas fa-search"></i>
+            </a>
+            <div id="quicksearch" class="clearfix">
+                <form action="/Search" method="POST" id="layout_search_form">
+                    <input name="__RequestVerificationToken" type="hidden" value="bCM9ze2kkwfuWma3yhpfXL0HV9gFZevMKDfyNjOzdN9zhVJuyNgy2bpt3joyfMEw1VviOV1JISKqVYlpyNGN+BF4NYSBDrKssGEth7EYBI3nqbEQcy4lFO0g9TokBkIxc6JMow==" />
+                    
+                    <input id="quicksearch-textbox" name="quicksearch-textbox" onfocus="if(this.value ==&#39;Search&#39;) { this.value = &#39;&#39;; }" type="text" value="Search" />
+
+                    <a href="#" id="quicksearch-button" title="Search" onclick="$('#layout_search_form').submit();return false;">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </form>
+            </div>
+        </div>
+        <!-- End quicksearch -->
+
+<!-- SIGN IN / REGISTER: -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: '/News/LoginHeader',
+            type: 'GET'
+        }).success(function (html) {
+            $('#loginContainer').html(html);            
+        });
+    });
+
+</script>
+
+<div id="loginContainer"></div>
+
+<!-- End sign in/ register -->
+
+        <!-- Language selection-->
+        <div id="contact-top-pc-browser">
+            <a id="english-culture" class="selected-culture" href="/en/Index" data-href="/en/Index"><span>English</span></a>
+            <a id="french-culture" class="selected-culture" href="/fr/Index" data-href="/fr/Index"><span>Fran&ccedil;ais</span></a>   
+        </div>
+        <!-- End Language selection-->
+        <!-- top-link-container -->
+        <div class="top-link-container">
+            <a href="https://meet.westuc.com/globenewswire-contact-us"><span>Contact Us</span></a>
+            <a href="https://w.globenewswire.com/en/publishing/distribution"><span>Global Distribution</span></a>
+            <a href="https://w.globenewswire.com/en/publishing/newswire"><span>Newswire Services</span></a>
+            <a href="https://w.globenewswire.com/en/publishing/filing"><span>Regulatory Filings</span></a>
+            <a href="https://w.globenewswire.com/en/publishing/partners"><span>Media Partners</span></a> 
+        </div>
+    </div>
+</div>
+    <!--End header-->
+
+    <!-- Start Body -->
+    
+  
+
+<!--Begin hero (blurb above main content)-->
+<div id="hero" class="hero-home-feature-container">
+<div class="flexslider">
+  <div id="time"></div>
+  <ul class="slides">
+  </ul>
+</div>
+</div><!-- End hero -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        window.refreshAntiforgeryTokens();
+
+        $.ajax({
+            url: '/Home/Carousel',
+            type: 'GET',
+            cache: true
+        }).success(function (slides_html) {
+            var regex = /<!-- Start Body -->([\s\S]+?)<!-- End Body -->/;
+            var match = regex.exec(slides_html);
+            $('ul.slides').html(match[1]);
+            $('.flexslider').flexslider({
+                directionNav: false
+            });
+        });
+    });
+</script>
+<!--The container is here-->
+<div id="main-container-home">
+
+    <div id="main-content-L1">
+<a id="NRPager"></a>
+    <a class="btn-primary right" href="/NewsRoom"><span id="newsroom-button">Newsroom</span></a>
+<div id="main-content-L1" class="padding-top-none">
+    
+        <div class="latestreleases-title"><h5><strong>latest news releases</strong> <i>from the newsroom</i></h5></div>
+    
+    <div>   
+<ul class="ui-html-pager ui-no-bullets">
+<li class="ui-html-pager-current"><a id="pagerPos" href="/Index?page=1#pagerPos">1</a></li>
+<li><a id="pagerPos" href="/Index?page=2#pagerPos">2</a></li>
+<li><a id="pagerPos" href="/Index?page=3#pagerPos">...</a></li>
+<li><a id="pagerPos" href="/Index?page=100#pagerPos">100</a></li>
+<li class="ui-html-pager-next"><a id="pagerPos" href="/Index?page=2#pagerPos">Next &raquo;</a></li>
+</ul>            <p class="dt-green search-metadata">Showing 1-10 of about 1974631 articles.</p>
+    </div>
+</div>
+<div class="ui-clearfix"></div>
+<div class="rl-master-container">
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img class="logo_image_center" src="/news-release/logo/806330/0/806330.jpg?lastModified=07%2F03%2F2019%2002%3A31%3A16&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">Eramet SA</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022985/0/en/Eramet-Q1-2020-sales-of-774m-down-11-affected-by-the-decline-in-material-prices.html">Eramet: Q1 2020 sales of €774m, down 11%, affected by the decline in material prices</a></h1>
+                    <p>Paris, 28 April 2020, 7:30 a.m.  PRESS RELEASE  Eramet: Q1 2020 sales of €774m, down 11%, affected by the decline in material prices  Sales of €774m in Q1 2020, down 11% compared to Q1 2019, mainly...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type multilang-release">multilang-release</span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img alt="logo.gif" class="logo_image_center" src="/news-release/logo/580660/0/580660.gif?lastModified=02%2F20%2F2019%2001%3A30%3A22&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">BOUSSARD AND GAVAUDAN HOLDING LIMITED (EUR)</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022984/0/en/BGHL-Euro-NAV-Share-buy-back.html">BGHL Euro NAV &amp; Share buy back</a></h1>
+                    <p>                                      BOUSSARD &amp; GAVAUDAN HOLDING LIMITED      Ordinary Shares      The Directors of Boussard &amp; Gavaudan Holding Limited would like to announce the following...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img class="logo_image_center" src="/news-release/logo/807939/0/807939.gif?lastModified=09%2F04%2F2019%2008%3A30%3A08&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">Kemira Oyj</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022983/0/en/Kemira-Oyj-s-Interim-Report-January-March-2020-Good-start-to-the-year-outlook-withdrawn-due-to-an-uncertain-environment.html">Kemira Oyj’s Interim Report January-March 2020: Good start to the year, outlook withdrawn due to an uncertain environment&#160;</a></h1>
+                    <p>Kemira OyjInterim ReportApril 28, 2020 at 8.30 am (CET+1)                                      Kemira Oyj’s Interim Report January-March 2020: Good start to the year, outlook withdrawn due to an...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type multilang-release">multilang-release</span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img class="logo_image_center" src="/news-release/logo/796111/0/796111.jpg?lastModified=04%2F27%2F2020%2001%3A07%3A57&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">MDxHealth (R)</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022982/0/en/MDxHealth-Announces-its-Annual-and-Extraordinary-General-Shareholders-Meetings.html">MDxHealth Announces its Annual and Extraordinary  General Shareholders’ Meetings</a></h1>
+                    <p>Press releaseRegulated information – Inside information28 April 2020, 7:30 a.m. CEST        IRVINE, CA, and HERSTAL, BELGIUM – 27 April 2020 – MDxHealth SA (Euronext Brussels: MDXH) (the "Company" or...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type multilang-release">multilang-release</span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img alt="logo.gif" class="logo_image_center" src="/news-release/logo/808280/0/808280.gif?lastModified=07%2F01%2F2019%2001%3A31%3A01&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">BW Offshore</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022981/0/en/BW-Offshore-Extension-agreement-for-Cidade-de-S%C3%A3o-Vicente.html">BW Offshore: Extension agreement for Cidade de S&#227;o Vicente</a></h1>
+                    <p>Extension agreement for Cidade de São Vicente  BW Offshore has received a notice from Petrobras that they exercise their right to extend the lease and operation agreement of BW Cidade de São Vicente...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img alt="logo.gif" class="logo_image_center" src="/news-release/logo/580657/0/580657.gif?lastModified=02%2F21%2F2019%2001%3A30%3A13&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">BOUSSARD AND GAVAUDAN HOLDING LIMITED (GBP)</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022980/0/en/BGHL-GBP-NAV-Share-buy-back.html">BGHL GBP NAV &amp; Share buy back</a></h1>
+                    <p>                                      BOUSSARD &amp; GAVAUDAN HOLDING LIMITED   Ordinary Shares  The Directors of Boussard &amp; Gavaudan Holding Limited would like to announce the following...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img alt="digital illumination.jpg" class="logo_image_center" src="/news-release/logo/475890/0/475890.jpg?lastModified=04%2F24%2F2019%2001%3A00%3A23&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">Digital Illumination Interface Alliance</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022979/0/en/Thread-Group-and-DiiA-Collaborate-to-Shape-the-Future-of-IoT-Lighting-for-Commercial-Buildings.html">Thread Group and DiiA Collaborate to Shape the Future of IoT Lighting for Commercial Buildings</a></h1>
+                    <p>SAN RAMON, Calif. and PISCATAWAY, N.J., April  28, 2020  (GLOBE NEWSWIRE) -- The Thread Group, an alliance addressing convergence, security, power, and architecture challenges at the network layer,...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>less than a minute ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img alt="ReportLinker logo.jpg" class="logo_image_center" src="/news-release/logo/853201/0/853201.jpg?lastModified=02%2F12%2F2020%2008%3A18%3A32&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">ReportLinker</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022977/0/en/Global-Intelligent-Platform-Management-Interface-IPMI-Industry.html">Global Intelligent Platform Management Interface (IPMI) Industry</a></h1>
+                    <p>New York, April  28, 2020  (GLOBE NEWSWIRE) -- Reportlinker.com announces the release of the report "Global Intelligent Platform Management Interface (IPMI) Industry" -...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>12 minutes ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                            <div class="logo_image-noborder">
+                                <img alt="logo.png" class="logo_image_center" src="/news-release/logo/802707/0/802707.png?lastModified=04%2F24%2F2020%2011%3A35%3A05&amp;size=2" />
+                            </div>
+                    </div>
+                    <p class="company-title">F. Hoffmann-La Roche Ltd</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022976/0/en/New-6-year-data-for-Roche-s-OCREVUS-ocrelizumab-show-earlier-treatment-initiation-nearly-halves-risk-of-needing-walking-aid-in-relapsing-multiple-sclerosis.html">New 6-year data for Roche’s OCREVUS (ocrelizumab) show earlier treatment initiation nearly halves risk of needing walking aid in relapsing multiple sclerosis</a></h1>
+                    <p>Post-hoc analysis from 6 years of Phase III open-label extension studies showed OCREVUS treatment reduced the risk of needing a walking aid (EDSS≥6) by 49% in relapsing multiple sclerosis (RMS)...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>27 minutes ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div id="main-content-L1" class="rl-container">
+                <div class="results-link">
+                    <div class="image_spacer">
+                    </div>
+                    <p class="company-title">GlobeNewswire, Inc.</p>
+                    <h1 class="post-title16px"><a href="/news-release/2020/04/28/2022978/0/en/Start-of-Day-Message.html">Start of Day Message</a></h1>
+                    <p>LONDON, 28 Apr. 2020 (GLOBE NEWSWIRE) -- This is the Start of Day Message for GlobeNewswire.   GlobeNewswire is operated by Intrado and is designated by the FCA as an approved primary information...</p>
+                    <div class="meta-margin">
+                        <p class="post-metadata"><span>30 minutes ago</span>
+                            <span class="post-type "></span>  </p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+</div>
+<div id="main-content-L1" class="padding-top-none">
+    <div>   
+<ul class="ui-html-pager ui-no-bullets">
+<li class="ui-html-pager-current"><a id="pagerPos" href="/Index?page=1#pagerPos">1</a></li>
+<li><a id="pagerPos" href="/Index?page=2#pagerPos">2</a></li>
+<li><a id="pagerPos" href="/Index?page=3#pagerPos">...</a></li>
+<li><a id="pagerPos" href="/Index?page=100#pagerPos">100</a></li>
+<li class="ui-html-pager-next"><a id="pagerPos" href="/Index?page=2#pagerPos">Next &raquo;</a></li>
+</ul>             <p class="dt-green search-metadata">Showing 1-10 of about 1974631 articles.</p>
+    </div>
+</div>
+    </div>
+
+<div class="spacer"></div>
+</div><!--End container-->
+    <!-- End Body -->
+
+<div id="footer">
+    <!--Left section of the footer goes here-->
+    <div id="footer-L">
+        <div class="footer-title"><h5>Newswire Distribution Network &amp; Management</h5></div>
+        <!--Left half of left column
+    <div class="footer-split-L1">
+        <ul>
+
+        </ul>
+    </div>-->
+        <!--Right half of left column
+    <div class="footer-split-R1">-->
+        <ul>
+            <li><a href="/Index">Home</a></li>
+            <li><a href="/NewsRoom">Newsroom</a></li>
+            <li><a href="/Rss/List">RSS Feeds</a></li>
+            <li><a href="/Home/about/Privacy">Legal</a></li>
+        </ul>
+        <!--</div>-->
+    </div>
+    <!--end left-->
+    <!--Middle section of the footer goes here-->
+    <div id="footer-R">
+        <div class="footer-title"><h6>About Us</h6></div>
+        <div class="footer-text"><strong>GlobeNewswire</strong> is one of the world's largest newswire distribution networks, specializing in the delivery of corporate press releases financial disclosures and multimedia content to the media, investment community, individual investors and the general public.
+    </div>
+</div>
+
+<!--end mid-->
+<div class="spacer"></div>
+<div id="copyright">&copy; 2020 GlobeNewswire, Inc. All Rights Reserved.</div>
+</div>
+    <!--End footer-->
+    <script async type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=2&cb=2033606442"></script>
+</body>
+    </html>
+
