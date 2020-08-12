@@ -15,10 +15,10 @@ headers = {
 class OptionChainSpider(scrapy.Spider):
     name = 'optionchain'
     base_url = 'https://finance.yahoo.com/quote'
+    today = dt.datetime.today()
 
     def get_next_friday(self):
-        today = dt.date.today()
-        friday = today + dt.timedelta((4-today.weekday())%7)
+        friday = self.today + dt.timedelta((4-today.weekday())%7)
         return friday
 
     def start_requests(self):
@@ -33,10 +33,12 @@ class OptionChainSpider(scrapy.Spider):
             for selection in option_dates.xpath('//select/option'):
                 expir_date = selection.xpath('.//text()').get()
                 expir_epoch = selection.xpath('.//@value').get()
-                date_url = f'{self.base_url}/{self.equity}/options?p={self.equity}&date={expir_epoch}&straddle=false'
-                next_page = response.urljoin(date_url)
-                self.logger.info(f'Initiating crawl for expiration date {expir_date}')
-                yield scrapy.Request(next_page, callback=self.parse_chain, headers=headers, meta={'expiry': expir_date})
+                dt_from_epoch = dt.datetime.utcfromtimestamp(int(expir_epoch))
+                if (dt_from_epoch - dt.datetime.fromordinal(self.today.toordinal())).days <= 110:
+                    date_url = f'{self.base_url}/{self.equity}/options?p={self.equity}&date={expir_epoch}&straddle=false'
+                    next_page = response.urljoin(date_url)
+                    self.logger.info(f'Initiating crawl for expiration date {expir_date}')
+                    yield scrapy.Request(next_page, callback=self.parse_chain, headers=headers, meta={'expiry': expir_date})
         else:
             self.logger.info('Was not able to obtain dropdown content')
         # in order to pass extra parameters to scrapy.Request()
